@@ -10,11 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
+    env:
+      CI: true
 
     steps:
       - name: Checkout code
@@ -31,10 +28,10 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
-      - name: Run migrations (safe mode)
-  run: |
-    source venv/bin/activate
-    python myproject/manage.py migrate --run-syncdb
+      - name: Run migrations
+        run: |
+          source venv/bin/activate
+          python myproject/manage.py migrate
 
       - name: Run tests
         run: |
